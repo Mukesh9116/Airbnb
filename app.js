@@ -1,7 +1,6 @@
 if(process.env.NODE_ENV != "production"){
 require('dotenv').config()
 }
-
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require("path");
@@ -14,23 +13,13 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
-
-
-
-
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 const user = require('./models/user.js');
 const app = express();
-const port = 8080;
-
-
-
+const port = process.env.PORT || 8080;
 const dbUrl = process.env.ATLASDB_URL;
-
-
-
 
 // MongoDB Connection
 main().then(() => {
@@ -81,13 +70,6 @@ const sessionOptions = {
   },
 };
 
-// Root route
-// app.get('/', (req, res) => {
-//   res.send('Hi, I am root');
-// });
-
-
-
 app.use(session(sessionOptions));
 app.use(flash());
 
@@ -105,18 +87,6 @@ app.use((req,res,next) => {
   res.locals.currUser = req.user;
   next();
 });
-
-// app.get("/demouser",async (req,res) => {
-//     let fakeUser = new User({
-//       email:"student@gmail.com",
-//       username:"delta-student"
-//     });
-
-//  let registeredUser = await  User.register(fakeUser,"helloworld")
-//  res.send( registeredUser);
-// });
-
-
 
 
 app.use("/listings", listingRouter);
